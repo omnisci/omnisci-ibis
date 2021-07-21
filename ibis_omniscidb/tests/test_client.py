@@ -12,11 +12,6 @@ import pytest
 from ibis.tests.util import assert_equal
 from pytest import param
 
-import ibis_omniscidb
-
-# NOTE: TEMPORARY UNTIL IBIS 2.0 IS RELEASED
-ibis.omniscidb = ibis_omniscidb
-
 
 def test_table(alltypes):
     assert isinstance(alltypes, ir.TableExpr)
@@ -229,7 +224,7 @@ def test_read_csv(con, temp_table, filename, alltypes, df_alltypes):
 
     # prepare csv file inside omnisci docker container
     # if the file exists, then it will be overwritten
-    con._execute(
+    con.raw_sql(
         "COPY (SELECT * FROM functional_alltypes) TO '{}'".format(filename)
     )
 
